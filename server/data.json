@@ -1,0 +1,12 @@
+{
+  "phrases": {
+    "minecraft": ["gaming"],
+    "fortnite": ["gaming"],
+    "roblox": ["gaming"],
+    "pewdiepie": ["youtubers", "gaming"],
+    "ninja": ["youtubers", "gaming", "streamers"],
+    "apple": ["tech"],
+    "google": ["tech"],
+    "ibm": ["tech"]
+  }
+}
