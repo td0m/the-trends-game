@@ -46,7 +46,12 @@ const InputNameDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={join} color="primary" variant="contained">
+        <Button
+          onClick={join}
+          disabled={name.length === 0}
+          color="primary"
+          variant="contained"
+        >
           Join Server
         </Button>
       </DialogActions>
