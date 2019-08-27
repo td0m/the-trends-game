@@ -121,13 +121,18 @@ const RoomPage = () => {
         {room &&
           Object.keys(room.players).map(pid => {
             const player = room.players[pid];
-            if (!player.online) return <div key={pid} />;
             return (
               <Avatar
                 key={pid}
                 name={pid}
                 enableBorder={player.ready}
-                color={pid === playerId ? colors.blue[100] : "#ddd"}
+                color={
+                  pid === playerId
+                    ? colors.blue[100]
+                    : player.online
+                    ? "#ddd"
+                    : colors.red[100]
+                }
                 textColor="dark"
               />
             );
