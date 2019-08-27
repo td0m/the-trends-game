@@ -24,11 +24,22 @@ func GetRooms(c *gin.Context) {
 		raw, ok := Rooms.Get(roomID)
 		if ok {
 			room := raw.(models.Room)
+
+			// count players
+			playerCount := 0
+			for _, key := range room.Players.Keys() {
+				raw, _ := room.Players.Get(key)
+				p := raw.(models.Player)
+				if p.Online {
+					playerCount++
+				}
+			}
+
 			if room.Public {
 				publicRooms = append(publicRooms, models.RoomSummary{
 					ID:          roomID,
 					Name:        room.Name,
-					PlayerCount: 0,
+					PlayerCount: playerCount,
 				})
 			}
 		}
