@@ -216,9 +216,8 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 			if ok {
 				room := raw.(models.Room)
 				phrase := strings.ToLower(action.Payload)
-				validPhrase := lib.IsValidPhrase(phrase, room.CurrentKeyword)
 				rawPlayer, ok := room.Players.Get(playerID)
-				if ok && validPhrase {
+				if ok {
 					player := rawPlayer.(models.Player)
 					player.Ready = true
 					player.Answers[room.CurrentKeyword] = models.Answer{
