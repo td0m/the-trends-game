@@ -22,7 +22,7 @@ const RoomPage = () => {
 
   const playerId = sessionStorage.getItem("name");
 
-  const ws = useMemo(() => new WebSocket("ws://localhost:8080/ws"), []);
+  const ws = useMemo(() => new WebSocket("ws://192.168.1.13:8080/ws"), []);
   useEffect(() => {
     ws.onopen = () => {
       ws.send(

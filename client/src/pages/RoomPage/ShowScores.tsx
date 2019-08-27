@@ -5,9 +5,9 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Badge
 } from "@material-ui/core";
-import CountUp from "components/CountUp";
 
 const getScore = (player: Player): number => {
   let total = 0;
@@ -23,17 +23,21 @@ const ShowScores = ({ room }: { room: Room }) => {
     <div>
       <T variant="h3">Scores</T>
       <List>
-        {Object.keys(room.players).map(k => {
-          const player = room.players[k];
-          return (
-            <ListItem key={k}>
-              <ListItemText primary={player.name} />
-              <ListItemSecondaryAction>
-                <CountUp tick={6} value={getScore(player)} />
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+        {Object.keys(room.players)
+          .sort((a, b) => {
+            return getScore(room.players[b]) - getScore(room.players[a]);
+          })
+          .map((k, i) => {
+            const player = room.players[k];
+            return (
+              <ListItem key={k}>
+                <ListItemText primary={player.name} />
+                <ListItemSecondaryAction>
+                  {getScore(player)}
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
       </List>
     </div>
   );

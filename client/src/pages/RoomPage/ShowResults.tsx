@@ -20,6 +20,12 @@ const ShowResults = ({ room }: { room: Room }) => {
           {Object.keys(room.players).map(pk => {
             const player = room.players[pk];
             const answer = player.answers[room.currentKeyword];
+            if (!answer)
+              return (
+                <div key={pk}>
+                  empty {room.currentKeyword} {pk}
+                </div>
+              );
             return (
               <ListItem key={pk}>
                 <ListItemText primary={answer.phrase} secondary={player.name} />

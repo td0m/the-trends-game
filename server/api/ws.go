@@ -89,17 +89,21 @@ func updateState(room models.Room) {
 					phrases = append(phrases, phrase)
 				}
 			}
-			results := lib.GetTrends(phrases)
-			for i, score := range results {
-				playerID := players[i]
-				log.Println("", playerID, score)
-				rawPlayer, _ := room.Players.Get(playerID)
-				player := rawPlayer.(models.Player)
-				player.Answers[room.CurrentKeyword] = models.Answer{
-					Score:  score,
-					Phrase: phrases[i],
+			results, err := lib.GetTrends(phrases)
+			if err != nil {
+				log.Println(phrases)
+			} else {
+				for i, score := range results {
+					playerID := players[i]
+					log.Println("", playerID, score)
+					rawPlayer, _ := room.Players.Get(playerID)
+					player := rawPlayer.(models.Player)
+					player.Answers[room.CurrentKeyword] = models.Answer{
+						Score:  score,
+						Phrase: phrases[i],
+					}
+					room.Players.Set(playerID, player)
 				}
-				room.Players.Set(playerID, player)
 			}
 
 			Rooms.Set(room.ID, room)
@@ -141,6 +145,8 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 					room.Players.Set(playerID, player)
 					Rooms.Set(roomID, room)
 
+					// todo: remove player object if no answers
+
 					// check if the room is not empty
 					atLeastOneUserConnected := false
 					for _, key := range room.Players.Keys() {
@@ -154,7 +160,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 					// empty/unused rooms get deleted
 					if !atLeastOneUserConnected {
 						// commented the next line out just for development purposes
-						Rooms.Remove(roomID)
+						// Rooms.Remove(roomID)
 					} else {
 						// if other users still connected, notify them about the user being removed
 						updateState(room)

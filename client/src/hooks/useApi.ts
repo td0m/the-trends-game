@@ -2,7 +2,7 @@ import createUseContext from "constate";
 import { useState } from "react";
 import usePersistedState from "./usePersistedState";
 
-const host = "localhost";
+const host = "192.168.1.13";
 export const apiUrl = "http://" + host + ":8080";
 export const wsUrl = "ws://" + host + ":8080/ws";
 

@@ -2,10 +2,12 @@ package lib
 
 import (
 	"context"
+	"errors"
+
 	"github.com/groovili/gogtrends"
 )
 
-func GetTrends(phrases []string) []int {
+func GetTrends(phrases []string) ([]int, error) {
 	items := []*gogtrends.ComparisonItem{}
 
 	for _, phrase := range phrases {
@@ -24,11 +26,14 @@ func GetTrends(phrases []string) []int {
 			Property:        "",
 		}, "EN")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	l, err := gogtrends.InterestOverTime(ctx, explore[0], "EN")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return l[len(l)-1].Value
+	if len(l) == 0 {
+		return nil, errors.New("index out of range")
+	}
+	return l[len(l)-1].Value, nil
 }
