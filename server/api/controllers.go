@@ -16,6 +16,18 @@ func GetCategories(c *gin.Context) {
 	c.JSON(200, lib.GetCategories())
 }
 
+func GetOnlinePlayers(room models.Room) []models.Player {
+	players := []models.Player{}
+	for _, key := range room.Players.Keys() {
+		raw, _ := room.Players.Get(key)
+		p := raw.(models.Player)
+		if p.Online {
+			players = append(players, p)
+		}
+	}
+	return players
+}
+
 func GetRooms(c *gin.Context) {
 	publicRooms := []models.RoomSummary{}
 
@@ -26,14 +38,7 @@ func GetRooms(c *gin.Context) {
 			room := raw.(models.Room)
 
 			// count players
-			playerCount := 0
-			for _, key := range room.Players.Keys() {
-				raw, _ := room.Players.Get(key)
-				p := raw.(models.Player)
-				if p.Online {
-					playerCount++
-				}
-			}
+			playerCount := len(GetOnlinePlayers(room))
 
 			if room.Public {
 				publicRooms = append(publicRooms, models.RoomSummary{
