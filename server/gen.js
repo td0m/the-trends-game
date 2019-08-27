@@ -15,6 +15,7 @@ const pronouns = [
   "she",
   "it",
   "they",
+  "we",
 
   "me",
   "him",
@@ -53,7 +54,8 @@ const banned = [
   "am",
   "not",
   "of",
-  "for"
+  "for",
+  "can"
 ];
 
 let count = 0;
