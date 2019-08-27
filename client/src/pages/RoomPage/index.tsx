@@ -12,11 +12,24 @@ import useApi from "hooks/useApi";
 import Avatar from "components/Avatar";
 
 import ArrowForward from "@material-ui/icons/ArrowForward";
+import PlayerMenu from "components/PlayerMenu";
+
+interface PlayerMenuInfo {
+  element?: any;
+  playerId: string;
+}
 
 const RoomPage = () => {
   const api = useApi();
   const router = useRouter();
   const [room, setRoom] = useState<Room | null>(null);
+  const [playerMenu, setPlayerMenu] = useState<PlayerMenuInfo>({
+    playerId: ""
+  });
+
+  const openPlayerMenu = (playerId: string) => (e: React.MouseEvent) => {
+    setPlayerMenu({ playerId, element: e.currentTarget });
+  };
 
   const { roomId } = router.match.params as any;
 
@@ -46,6 +59,9 @@ const RoomPage = () => {
 
   const closeRoom = () => {
     ws.close();
+  };
+  const onAction = (action: any) => {
+    ws.send(JSON.stringify(action));
   };
   const onSubmit = (phrase: string) => {
     ws.send(
@@ -123,6 +139,7 @@ const RoomPage = () => {
             const player = room.players[pid];
             return (
               <Avatar
+                onClick={openPlayerMenu(pid)}
                 key={pid}
                 name={pid}
                 enableBorder={player.ready}
@@ -158,6 +175,12 @@ const RoomPage = () => {
           </Fab>
         </div>
       )}
+      <PlayerMenu
+        playerId={playerMenu.playerId}
+        anchorEl={playerMenu.element}
+        onClose={() => setPlayerMenu({ playerId: "" })}
+        onAction={onAction}
+      />
     </div>
   );
 };

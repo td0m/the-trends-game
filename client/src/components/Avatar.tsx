@@ -5,12 +5,14 @@ const Avatar = ({
   name,
   color,
   textColor,
-  enableBorder = false
+  enableBorder = false,
+  onClick
 }: {
   name: string;
   color: string;
   textColor: "dark" | "white";
   enableBorder?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -22,10 +24,15 @@ const Avatar = ({
     setTimeout(() => setShowTooltip(false), 2000);
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    onShowTooltip();
+    onClick && onClick(e);
+  };
+
   const size = 35;
   const c = textColor === "dark" ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.7)";
   return (
-    <Tooltip title={name} onClick={onShowTooltip} open={showTooltip}>
+    <Tooltip title={name} onClick={handleClick} open={showTooltip}>
       <Paper
         elevation={2}
         onMouseOver={onShowTooltip}

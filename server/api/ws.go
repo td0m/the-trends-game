@@ -247,6 +247,23 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 			break
+		case "KICK_PLAYER":
+			raw, ok := Rooms.Get(roomID)
+			if ok {
+				room := raw.(models.Room)
+				for _, key := range room.Players.Keys() {
+					if key == action.Payload {
+						pr, _ := room.Players.Get(key)
+						p := pr.(models.Player)
+						p.Socket.Close()
+						// comment the next line to not delete progress of that user
+						// room.Players.Remove(key)
+						Rooms.Set(roomID, room)
+						notifyRoom(roomID)
+					}
+				}
+			}
+			break
 		}
 	}
 }
