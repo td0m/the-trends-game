@@ -7,7 +7,7 @@ import {
   ListItem,
   ListItemSecondaryAction
 } from "@material-ui/core";
-import CountUp from "components/CountUp";
+import CountUp from "react-countup";
 
 const ShowResults = ({ room }: { room: Room }) => {
   return (
@@ -30,7 +30,7 @@ const ShowResults = ({ room }: { room: Room }) => {
               <ListItem key={pk}>
                 <ListItemText primary={answer.phrase} secondary={player.name} />
                 <ListItemSecondaryAction>
-                  <CountUp value={answer.score} />
+                  <CountUp start={0} end={answer.score} duration={0.8} />
                 </ListItemSecondaryAction>
               </ListItem>
             );

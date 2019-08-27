@@ -8,6 +8,7 @@ import {
   ListItemSecondaryAction,
   Badge
 } from "@material-ui/core";
+import CountUp from "react-countup";
 
 const getScore = (player: Player): number => {
   let total = 0;
@@ -33,7 +34,7 @@ const ShowScores = ({ room }: { room: Room }) => {
               <ListItem key={k}>
                 <ListItemText primary={player.name} />
                 <ListItemSecondaryAction>
-                  {getScore(player)}
+                  <CountUp start={0} end={getScore(player)} duration={1} />
                 </ListItemSecondaryAction>
               </ListItem>
             );
